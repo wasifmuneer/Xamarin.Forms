@@ -149,6 +149,7 @@
     <Compile Include="IOSAppLinks.cs" />
     <Compile Include="NativeViewPropertyListener.cs" />
     <Compile Include="Extensions\LayoutExtensions.cs" />
+    <Compile Include="NativeValueConverterService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\StringResources.ar.resx" />

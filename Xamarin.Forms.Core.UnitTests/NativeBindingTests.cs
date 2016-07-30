@@ -206,5 +206,70 @@ namespace Xamarin.Forms.Core.UnitTests
 			Assert.AreEqual("foo", nativeView.Baz);
 			Assert.AreEqual("foo", vm.FFoo);
 		}
+
+		[Test]
+		public void NativeViewsAreCollected()
+		{
+			WeakReference wr = null;
+
+			int i = 0;
+			Action create = null;
+			create = () => {
+				if (i++ < 1024) {
+					create();
+					return;
+				}
+
+				var nativeView = new MockNativeView();
+				nativeView.SetBinding("fooBar", new Binding("Foo", BindingMode.TwoWay));
+				nativeView.SetBinding("Baz", new Binding("Qux", BindingMode.TwoWay), "BazChanged");
+
+				wr = new WeakReference(nativeView);
+				nativeView = null;
+
+			};
+
+			create();
+
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
+			GC.Collect();
+
+			Assert.False(wr.IsAlive);
+		}
+
+		[Test]
+		public void ProxiesAreCollected()
+		{
+			WeakReference wr = null;
+
+			int i = 0;
+			Action create = null;
+			create = () => {
+				if (i++ < 1024) {
+					create();
+					return;
+				}
+
+				var nativeView = new MockNativeView();
+				nativeView.SetBinding("fooBar", new Binding("Foo", BindingMode.TwoWay));
+				nativeView.SetBinding("Baz", new Binding("Qux", BindingMode.TwoWay), "BazChanged");
+
+				BindableObjectProxy<MockNativeView> proxy;
+				if (!BindableObjectProxy<MockNativeView>.BindableObjectProxies.TryGetValue(nativeView, out proxy))
+					Assert.Fail();
+
+				wr = new WeakReference(proxy);
+				nativeView = null;
+			};
+
+			create();
+
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
+			GC.Collect();
+
+			Assert.False(wr.IsAlive);
+		}
 	}
 }

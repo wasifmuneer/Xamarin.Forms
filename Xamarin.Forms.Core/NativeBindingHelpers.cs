@@ -1,11 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using Xamarin.Forms.Internals;
 
 namespace Xamarin.Forms
 {
 	static class NativeBindingHelpers
 	{
+		public static void SetBinding<TNativeView>(TNativeView target, string targetProperty, BindingBase bindingBase, string updateSourceEventName) where TNativeView : class
+		{
+			if (string.IsNullOrEmpty(updateSourceEventName))
+				throw new ArgumentNullException(nameof(updateSourceEventName));
+
+			var eventWrapper = new EventWrapper(target, targetProperty, updateSourceEventName);
+			SetBinding(target, targetProperty, bindingBase, eventWrapper);
+		}
+
 		public static void SetBinding<TNativeView>(TNativeView target, string targetProperty, BindingBase bindingBase, INotifyPropertyChanged propertyChanged = null) where TNativeView : class
 		{
 			if (target == null)
@@ -79,7 +91,7 @@ namespace Xamarin.Forms
 				throw new ArgumentNullException(nameof(target));
 			if (targetProperty == null)
 				throw new ArgumentNullException(nameof(targetProperty));
-			
+
 			var proxy = BindableObjectProxy<TNativeView>.BindableObjectProxies.GetValue(target, (TNativeView key) => new BindableObjectProxy<TNativeView>(key));
 			proxy.ValuesBackpack.Add(new KeyValuePair<BindableProperty, object>(targetProperty, value));
 		}
@@ -99,6 +111,35 @@ namespace Xamarin.Forms
 			foreach (var child in children)
 				if (child != null)
 					SetBindingContext(child, bindingContext, getChild);
+		}
+
+		class EventWrapper : INotifyPropertyChanged
+		{
+			string TargetProperty { get; set; }
+			static readonly MethodInfo s_handlerinfo = typeof(EventWrapper).GetRuntimeMethods().Single(mi => mi.Name == "OnPropertyChanged" && mi.IsPublic == false);
+
+			public EventWrapper(object target, string targetProperty, string updateSourceEventName)
+			{
+				TargetProperty = targetProperty;
+				Delegate handlerDelegate = null;
+				EventInfo updateSourceEvent=null;
+				try {
+					updateSourceEvent = target.GetType().GetRuntimeEvent(updateSourceEventName);
+					handlerDelegate = s_handlerinfo.CreateDelegate(updateSourceEvent.EventHandlerType, this);
+				} catch (Exception){
+					Log.Warning("EventWrapper", "Can not attach EventWrapper.");
+				}
+				if (updateSourceEvent != null && handlerDelegate != null)
+					updateSourceEvent.AddEventHandler(target, handlerDelegate);
+			}
+
+			[Preserve]
+			void OnPropertyChanged(object sender, EventArgs e)
+			{
+				PropertyChanged?.Invoke(sender, new PropertyChangedEventArgs(TargetProperty));
+			}
+
+			public event PropertyChangedEventHandler PropertyChanged;
 		}
 	}
 }

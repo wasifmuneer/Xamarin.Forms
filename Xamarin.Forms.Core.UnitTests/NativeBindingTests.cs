@@ -10,6 +10,14 @@ namespace Xamarin.Forms.Core.UnitTests
 		public IList<MockNativeView> SubViews { get; set; }
 		public string Foo { get; set; }
 		public int Bar { get; set; }
+		public string Baz { get; set; }
+
+		public void FireBazChanged()
+		{
+			BazChanged?.Invoke(this, new TappedEventArgs(null));
+		}
+
+		public event EventHandler<TappedEventArgs> BazChanged;
 	}
 
 	class MockNativeViewWrapper : View
@@ -39,6 +47,11 @@ namespace Xamarin.Forms.Core.UnitTests
 		public static View ToView(this MockNativeView nativeView)
 		{
 			return new MockNativeViewWrapper(nativeView);
+		}
+
+		public static void SetBinding(this MockNativeView target, string targetProperty, BindingBase binding, string updateSourceEventName)
+		{
+			NativeBindingHelpers.SetBinding(target, targetProperty, binding, updateSourceEventName);
 		}
 
 		public static void SetBinding(this MockNativeView target, string targetProperty, BindingBase binding, INotifyPropertyChanged propertyChanged = null)
@@ -169,6 +182,29 @@ namespace Xamarin.Forms.Core.UnitTests
 			Assert.AreEqual(42, nativeView.Bar);
 			Assert.AreEqual("foo", vm.FFoo);
 			Assert.AreEqual(42, vm.BBar);
+		}
+
+		[Test]
+		public void Set2WayBindingsWithUpdateSourceEvent()
+		{
+			var nativeView = new MockNativeView();
+			Assert.AreEqual(null, nativeView.Baz);
+
+			var vm = new MockVMForNativeBinding();
+			nativeView.SetBindingContext(vm);
+
+			nativeView.SetBinding("Baz", new Binding("FFoo", mode: BindingMode.TwoWay), "BazChanged");
+			Assert.AreEqual(null, nativeView.Baz);
+			Assert.AreEqual(null, vm.FFoo);
+
+			nativeView.Baz = "oof";
+			nativeView.FireBazChanged();
+			Assert.AreEqual("oof", nativeView.Baz);
+			Assert.AreEqual("oof", vm.FFoo);
+
+			vm.FFoo = "foo";
+			Assert.AreEqual("foo", nativeView.Baz);
+			Assert.AreEqual("foo", vm.FFoo);
 		}
 	}
 }

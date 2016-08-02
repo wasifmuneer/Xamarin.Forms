@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace Xamarin.Forms.Core.UnitTests
 {
@@ -22,6 +23,20 @@ namespace Xamarin.Forms.Core.UnitTests
 		}
 
 		public event EventHandler<TappedEventArgs> BazChanged;
+
+		public event EventHandler SelectedColorChanged;
+
+		MockNativeColor _selectedColor;
+		public MockNativeColor SelectedColor
+		{
+			get { return _selectedColor; }
+			set
+			{
+				_selectedColor = value;
+				SelectedColorChanged?.Invoke(this, new EventArgs());
+			}
+		}
+
 	}
 
 	class MockNativeViewWrapper : View
@@ -43,6 +58,22 @@ namespace Xamarin.Forms.Core.UnitTests
 		{
 			NativeView.SetBindingContext(BindingContext, nv => nv.SubViews);
 			base.OnBindingContextChanged();
+		}
+
+	}
+
+	public class MockNativeColor
+	{
+
+		public MockNativeColor(Color color)
+		{
+			FormsColor = color;
+		}
+
+		public Color FormsColor
+		{
+			get;
+			set;
 		}
 	}
 
@@ -79,6 +110,23 @@ namespace Xamarin.Forms.Core.UnitTests
 		}
 	}
 
+	class MockCustomColorConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			if (value is Color)
+				return new MockNativeColor((Color)value);
+			return value;
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			if (value is MockNativeColor)
+				return ((MockNativeColor)value).FormsColor;
+			return value;
+		}
+	}
+
 	class MockINPC : INotifyPropertyChanged
 	{
 		public void FireINPC(object sender, string propertyName)
@@ -110,6 +158,17 @@ namespace Xamarin.Forms.Core.UnitTests
 			{
 				bBar = value;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BBar"));
+			}
+		}
+
+		Color cColor;
+		public Color CColor
+		{
+			get { return cColor; }
+			set
+			{
+				cColor = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CColor"));
 			}
 		}
 
@@ -285,6 +344,7 @@ namespace Xamarin.Forms.Core.UnitTests
 			Assert.False(wr.IsAlive);
 		}
 
+		[Test]
 		public void SetBindingContextToSubviews()
 		{
 			var nativeView = new MockNativeView();
@@ -312,6 +372,85 @@ namespace Xamarin.Forms.Core.UnitTests
 			var nativeView = new MockNativeView();
 
 			Assert.Throws<ArgumentNullException>(() => nativeView.SetBinding("Foo", new Binding("FFoo", mode: BindingMode.TwoWay), ""));
+		}
+
+		[Test]
+		public void ThrowsNeedsConverter()
+		{
+			var nativeView = new MockNativeView();
+			Assert.AreEqual(null, nativeView.Foo);
+			Assert.AreEqual(0, nativeView.Bar);
+			var vm = new MockVMForNativeBinding();
+			nativeView.SetBinding("SelectedColor", new Binding("CColor"));
+			Assert.Throws<ArgumentException>(() => nativeView.SetBindingContext(vm));
+		}
+
+		[Test]
+		public void TestConverterDoesNotThrow()
+		{
+			var nativeView = new MockNativeView();
+			Assert.AreEqual(null, nativeView.Foo);
+			Assert.AreEqual(0, nativeView.Bar);
+			var vm = new MockVMForNativeBinding();
+			var converter = new MockCustomColorConverter();
+			nativeView.SetBinding("SelectedColor", new Binding("CColor", converter: converter));
+			Assert.DoesNotThrow(() => nativeView.SetBindingContext(vm));
+		}
+
+		[Test]
+		public void TestConverterWorks()
+		{
+			var nativeView = new MockNativeView();
+			Assert.AreEqual(null, nativeView.Foo);
+			Assert.AreEqual(0, nativeView.Bar);
+			var vm = new MockVMForNativeBinding();
+			vm.CColor = Color.Red;
+			var converter = new MockCustomColorConverter();
+			nativeView.SetBinding("SelectedColor", new Binding("CColor", converter: converter));
+			nativeView.SetBindingContext(vm);
+			Assert.AreEqual(vm.CColor, nativeView.SelectedColor.FormsColor);
+		}
+
+		[Test]
+		public void TestConverterwWayWorks()
+		{
+			var nativeView = new MockNativeView();
+			Assert.AreEqual(null, nativeView.Foo);
+			Assert.AreEqual(0, nativeView.Bar);
+			var inpc = new MockINPC();
+			var vm = new MockVMForNativeBinding();
+			vm.CColor = Color.Red;
+			var converter = new MockCustomColorConverter();
+			nativeView.SetBinding("SelectedColor", new Binding("CColor", BindingMode.TwoWay, converter), inpc);
+			nativeView.SetBindingContext(vm);
+			Assert.AreEqual(vm.CColor, nativeView.SelectedColor.FormsColor);
+
+			var newFormsColor = Color.Blue;
+			var newColor = new MockNativeColor(newFormsColor);
+			nativeView.SelectedColor = newColor;
+			inpc.FireINPC(nativeView, nameof(nativeView.SelectedColor));
+
+			Assert.AreEqual(newFormsColor, vm.CColor);
+
+		}
+
+		[Test]
+		public void TestConverterwWayWorksOnlyOnce()
+		{
+			var nativeView = new MockNativeView();
+			int count = 0;
+
+			nativeView.SelectedColorChanged += (sender, e) => count++;
+			var newFormsColor = Color.Blue;
+			Assert.AreEqual(null, nativeView.Foo);
+			Assert.AreEqual(0, nativeView.Bar);
+			var vm = new MockVMForNativeBinding { CColor = Color.Red };
+
+			var converter = new MockCustomColorConverter();
+			nativeView.SetBinding("SelectedColor", new Binding("CColor", BindingMode.TwoWay, converter), "SelectedColorChanged");
+			nativeView.SetBindingContext(vm);
+
+			Assert.AreEqual(count, 1);
 		}
 	}
 }

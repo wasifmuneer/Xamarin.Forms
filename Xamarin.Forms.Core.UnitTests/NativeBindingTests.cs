@@ -434,13 +434,25 @@ namespace Xamarin.Forms.Core.UnitTests
 
 		}
 
+		EventHandler handler;
+
 		[Test]
 		public void TestConverterwWayWorksOnlyOnce()
 		{
 			var nativeView = new MockNativeView();
 			int count = 0;
 
-			nativeView.SelectedColorChanged += (sender, e) => count++;
+			handler = (object sender, EventArgs e) =>
+			{
+				count++;
+				if (count > 5)
+				{
+					nativeView.SelectedColorChanged -= handler;
+					Assert.Fail("Overflow");
+				}
+
+			};
+			nativeView.SelectedColorChanged += handler;
 			var newFormsColor = Color.Blue;
 			Assert.AreEqual(null, nativeView.Foo);
 			Assert.AreEqual(0, nativeView.Bar);

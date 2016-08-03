@@ -1,9 +1,9 @@
 
 namespace Xamarin.Forms.PlatformConfiguration.iOSSpecific
 {
-	using FormsElement = Forms.BoxView;
+	using FormsElement = Forms.VisualElement;
 
-	public static class BoxView
+	public static class VisualElement
 	{
 		public static readonly BindableProperty BlurEffectProperty =
 			BindableProperty.Create("BlurEffect", typeof(BlurEffectStyle),

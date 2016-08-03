@@ -21,7 +21,6 @@ namespace Xamarin.Forms.ControlGallery.Android
 		ImageView imageViewPallete;
 		Droid.Graphics.Color selectedColor;
 		Droid.Graphics.Color previewColor;
-		Droid.Graphics.Bitmap backgroundBitmap;
 
 		public event PropertyChangedEventHandler PropertyChanged;
 		public event EventHandler ColorPicked;
@@ -42,7 +41,8 @@ namespace Xamarin.Forms.ControlGallery.Android
 				if (e.Event.Action == MotionEventActions.Down || e.Event.Action == MotionEventActions.Move)
 				{
 					currentPoint = new Droid.Graphics.Point((int)e.Event.GetX(), (int)e.Event.GetY());
-					previewColor = GetCurrentColor((int)e.Event.GetX(), (int)e.Event.GetY());
+
+					previewColor = GetCurrentColor(imageViewPallete.GetDrawingCache(false), (int)e.Event.GetX(), (int)e.Event.GetY());
 				}
 				if (e.Event.Action == MotionEventActions.Up)
 				{
@@ -95,21 +95,21 @@ namespace Xamarin.Forms.ControlGallery.Android
 			colorPointer?.UpdatePoint(currentPoint);
 		}
 
-		Droid.Graphics.Color GetCurrentColor(int x, int y)
+		Droid.Graphics.Color GetCurrentColor(Droid.Graphics.Bitmap bitmap, int x, int y)
 		{
-			if (backgroundBitmap == null)
-				backgroundBitmap = imageViewPallete.GetDrawingCache(false);
+			if (bitmap == null)
+				return new Droid.Graphics.Color(255, 255, 255, 255);
 
 			if (x < 0)
 				x = 0;
 			if (y < 0)
 				y = 0;
-			if (x >= backgroundBitmap.Width)
-				x = backgroundBitmap.Width - 1;
-			if (y >= backgroundBitmap.Height)
-				y = backgroundBitmap.Height - 1;
+			if (x >= bitmap.Width)
+				x = bitmap.Width - 1;
+			if (y >= bitmap.Height)
+				y = bitmap.Height - 1;
 
-			int color = backgroundBitmap.GetPixel(x, y);
+			int color = bitmap.GetPixel(x, y);
 			return new Droid.Graphics.Color(color);
 		}
 

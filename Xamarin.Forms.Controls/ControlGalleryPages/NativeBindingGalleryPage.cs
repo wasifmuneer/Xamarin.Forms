@@ -1,5 +1,7 @@
 ﻿using System;
 using Xamarin.Forms.Internals;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Xamarin.Forms.Controls
 {
@@ -60,41 +62,73 @@ namespace Xamarin.Forms.Controls
 
 
 	[Preserve(AllMembers = true)]
-	public class NestedNativeViewModel : ViewModelBase
+	public class NestedNativeViewModel : INotifyPropertyChanged
 	{
 		string _formsLabel;
 		public string FormsLabel
 		{
 			get { return _formsLabel; }
-			set { _formsLabel = value; OnPropertyChanged(); }
+			set {
+				if (_formsLabel == value)
+					return;
+				_formsLabel = value;
+				OnPropertyChanged();
+			}
 		}
 
 		string _nativeLabel;
 		public string NativeLabel
 		{
 			get { return _nativeLabel; }
-			set { _nativeLabel = value; OnPropertyChanged(); }
+			set {
+				if (_nativeLabel == value)
+					return;
+				_nativeLabel = value;
+				OnPropertyChanged();
+			}
 		}
 
 		Color _nativeLabelColor;
 		public Color NativeLabelColor
 		{
 			get { return _nativeLabelColor; }
-			set { _nativeLabelColor = value; OnPropertyChanged(); }
+			set {
+				if (_nativeLabelColor == value)
+					return;
+				_nativeLabelColor = value;
+				OnPropertyChanged(); 
+			}
 		}
 
 		int _age;
 		public int Age
 		{
 			get { return _age; }
-			set { _age = value; OnPropertyChanged(); }
+			set {
+				if (_age == value)
+					return;
+				_age = value;
+				OnPropertyChanged();
+			}
 		}
 
 		bool _selected;
 		public bool Selected
 		{
 			get { return _selected; }
-			set { _selected = value; OnPropertyChanged(); }
+			set {
+				if (_selected == value)
+					return;
+				_selected = value;
+				OnPropertyChanged();
+			}
+		}
+
+
+		public event PropertyChangedEventHandler PropertyChanged;
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 

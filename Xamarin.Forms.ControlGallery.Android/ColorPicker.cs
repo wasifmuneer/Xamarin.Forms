@@ -8,7 +8,8 @@ using Droid = Android;
 
 namespace Xamarin.Forms.ControlGallery.Android
 {
-	public class ColorPickerView : ViewGroup, INotifyPropertyChanged
+	public class ColorPickerView : ViewGroup
+	//, INotifyPropertyChanged
 	{
 		static readonly int[] COLORS = new[] {
 				new Droid.Graphics.Color(255,0,0,255).ToArgb(), new Droid.Graphics.Color(255,0,255,255).ToArgb(), new Droid.Graphics.Color(0,0,255,255).ToArgb(),
@@ -22,7 +23,7 @@ namespace Xamarin.Forms.ControlGallery.Android
 		Droid.Graphics.Color selectedColor;
 		Droid.Graphics.Color previewColor;
 
-		public event PropertyChangedEventHandler PropertyChanged;
+		//public event PropertyChangedEventHandler PropertyChanged;
 		public event EventHandler ColorPicked;
 
 		public ColorPickerView(Context context, int minWidth, int minHeight) : base(context)
@@ -115,7 +116,7 @@ namespace Xamarin.Forms.ControlGallery.Android
 
 		void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
 		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		void OnColorPicked()

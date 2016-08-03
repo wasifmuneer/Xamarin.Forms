@@ -32,8 +32,10 @@ namespace Xamarin.Forms.Core.UnitTests
 			get { return _selectedColor; }
 			set
 			{
+				if (_selectedColor == value)
+					return;
 				_selectedColor = value;
-				SelectedColorChanged?.Invoke(this, new EventArgs());
+				SelectedColorChanged?.Invoke(this, EventArgs.Empty);
 			}
 		}
 
@@ -74,6 +76,19 @@ namespace Xamarin.Forms.Core.UnitTests
 		{
 			get;
 			set;
+		}
+
+		public override bool Equals(object obj)
+		{
+			var mnc = obj as MockNativeColor;
+			if (mnc == null)
+				return base.Equals(obj);
+			return FormsColor.Equals(mnc.FormsColor);
+		}
+
+		public override int GetHashCode()
+		{
+			return FormsColor.GetHashCode();
 		}
 	}
 
@@ -412,7 +427,7 @@ namespace Xamarin.Forms.Core.UnitTests
 		}
 
 		[Test]
-		public void TestConverterwWayWorks()
+		public void TestConverter2WayWorks()
 		{
 			var nativeView = new MockNativeView();
 			Assert.AreEqual(null, nativeView.Foo);
@@ -434,32 +449,20 @@ namespace Xamarin.Forms.Core.UnitTests
 
 		}
 
-		EventHandler handler;
-
 		[Test]
-		public void TestConverterwWayWorksOnlyOnce()
+		public void Binding2WayWithConvertersDoNotLoop()
 		{
 			var nativeView = new MockNativeView();
 			int count = 0;
 
-			handler = (object sender, EventArgs e) =>
-			{
-				count++;
-				if (count > 5)
-				{
-					nativeView.SelectedColorChanged -= handler;
-					Assert.Fail("Overflow");
-				}
-
+			nativeView.SelectedColorChanged += (o, e) => {
+				if (++count > 5)
+					Assert.Fail("Probable loop detected");
 			};
-			nativeView.SelectedColorChanged += handler;
-			var newFormsColor = Color.Blue;
-			Assert.AreEqual(null, nativeView.Foo);
-			Assert.AreEqual(0, nativeView.Bar);
+
 			var vm = new MockVMForNativeBinding { CColor = Color.Red };
 
-			var converter = new MockCustomColorConverter();
-			nativeView.SetBinding("SelectedColor", new Binding("CColor", BindingMode.TwoWay, converter), "SelectedColorChanged");
+			nativeView.SetBinding("SelectedColor", new Binding("CColor", BindingMode.TwoWay, new MockCustomColorConverter()), "SelectedColorChanged");
 			nativeView.SetBindingContext(vm);
 
 			Assert.AreEqual(count, 1);

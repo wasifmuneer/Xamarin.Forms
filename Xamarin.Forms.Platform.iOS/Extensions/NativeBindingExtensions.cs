@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 #if __UNIFIED__
 using UIKit;
 
@@ -19,7 +20,7 @@ namespace Xamarin.Forms.Platform.iOS
 		public static void SetBinding(this UIView view, string propertyName, BindingBase binding)
 		{
 			NativeViewPropertyListener nativePropertyListener = null;
-			if (binding.Mode == BindingMode.TwoWay)
+			if (binding.Mode == BindingMode.TwoWay && !(view is INotifyPropertyChanged))
 			{
 				nativePropertyListener = new NativeViewPropertyListener(propertyName);
 				view.AddObserver(nativePropertyListener, propertyName, 0, IntPtr.Zero);

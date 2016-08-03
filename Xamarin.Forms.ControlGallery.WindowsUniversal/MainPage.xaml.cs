@@ -138,7 +138,7 @@ namespace Xamarin.Forms.ControlGallery.WindowsUniversal
 
 			txbLabel.SetBinding("Text", new Binding("NativeLabel"));
 			txbBox.SetBinding("Text", new Binding("NativeLabel", BindingMode.TwoWay), "TextChanged");
-			txbLabel.SetBinding("Foreground", new Binding("NativeLabelColor", converter: new ColorToBrushNativeBindingConverter()));
+			txbLabel.SetBinding("Foreground", new Binding("NativeLabelColor", BindingMode.TwoWay, new ColorToBrushNativeBindingConverter()));
 
 			var grd = new StackPanel();
 			grd.Children.Add(txbLabel);

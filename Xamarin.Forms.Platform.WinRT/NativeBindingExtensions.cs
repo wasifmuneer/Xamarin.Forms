@@ -16,7 +16,7 @@ namespace Xamarin.Forms.Platform.WinRT
 		public static void SetBinding(this FrameworkElement view, string propertyName, BindingBase binding, string eventSourceName)
 		{
 			NativeEventWrapper eventE = null;
-			if (binding.Mode == BindingMode.TwoWay)
+			if (binding.Mode == BindingMode.TwoWay && !(view is INotifyPropertyChanged))
 				eventE = new NativeEventWrapper(view, propertyName, eventSourceName);
 
 			NativeBindingHelpers.SetBinding(view, propertyName, binding, eventE);

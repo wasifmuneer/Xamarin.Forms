@@ -1,3 +1,5 @@
+using Android.Views;
+
 namespace Xamarin.Forms.Platform.Android
 {
 	public class NativeViewWrapper : View
@@ -25,7 +27,7 @@ namespace Xamarin.Forms.Platform.Android
 
 		protected override void OnBindingContextChanged()
 		{
-			NativeBindingHelpers.SetBindingContext(NativeView, BindingContext);
+			NativeBindingHelpers.SetBindingContext(NativeView, BindingContext, (view) => (view as ViewGroup)?.GetChildrenOfType<global::Android.Views.View>());
 			base.OnBindingContextChanged();
 		}
 	}

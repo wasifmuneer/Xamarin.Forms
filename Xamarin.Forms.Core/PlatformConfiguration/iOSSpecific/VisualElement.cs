@@ -7,7 +7,7 @@ namespace Xamarin.Forms.PlatformConfiguration.iOSSpecific
 	{
 		public static readonly BindableProperty BlurEffectProperty =
 			BindableProperty.Create("BlurEffect", typeof(BlurEffectStyle),
-			typeof(NavigationPage), BlurEffectStyle.None);
+			typeof(VisualElement), BlurEffectStyle.None);
 
 		public static BlurEffectStyle GetBlurEffect(BindableObject element)
 		{

@@ -52,7 +52,9 @@ namespace Xamarin.Forms.Platform.WinRT
 	        set
 	        {
 	            _toolbarPlacement = value;
+#if WINDOWS_UWP
 	            UpdateToolbarPlacement();
+#endif
 	        }
 	    }
 

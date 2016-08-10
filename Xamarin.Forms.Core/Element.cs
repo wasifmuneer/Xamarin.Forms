@@ -362,6 +362,12 @@ namespace Xamarin.Forms
 		protected virtual void OnParentSet()
 		{
 			ParentSet?.Invoke(this, EventArgs.Empty);
+
+			var parent = Parent;
+			if (parent != null)
+			{
+
+			}
 		}
 
 		protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -392,6 +398,16 @@ namespace Xamarin.Forms
 					yield return child;
 					queue.Enqueue(child);
 				}
+			}
+		}
+
+		internal override void OnInheritablePropertySet(BindableProperty property, object value)
+		{
+			base.OnInheritablePropertySet(property, value);
+
+			foreach (var child in LogicalChildrenInternal)
+			{
+				child.SetInheritedValue(property, value);
 			}
 		}
 

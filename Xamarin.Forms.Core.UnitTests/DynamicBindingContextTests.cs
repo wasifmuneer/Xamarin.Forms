@@ -10,6 +10,22 @@ using NUnit.Framework;
 namespace Xamarin.Forms.Core.UnitTests
 {
 	[TestFixture]
+	public class InheritableBindablePropertyTests
+	{
+		[Test]
+		public void BasicInheritance()
+		{
+			var layout = new StackLayout();
+			var child = new Label();
+
+			layout.Children.Add(child);
+			layout.FlowDirection = FlowDirection.RightToLeft;
+
+			Assert.AreEqual(FlowDirection.RightToLeft, child.FlowDirection);
+		}
+	}
+
+	[TestFixture]
 	public class DynamicBindingContextTests
 	{
 		[Test]

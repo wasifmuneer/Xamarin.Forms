@@ -2,10 +2,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 xmlns:ios="clr-namespace:UIKit;assembly=Xamarin.iOS;targetPlatform=iOS"
-			 xmlns:android="clr-namespace:Android.Views;assembly=Mono.Android;targetPlatform=Android"
+			 xmlns:androidWidget="clr-namespace:Android.Widget;assembly=Mono.Android;targetPlatform=Android"
+			 xmlns:formsandroid="clr-namespace:Xamarin.Forms;assembly=Xamarin.Forms.Platform.Android;targetPlatform=Android"
 			 x:Class="Xamarin.Forms.Controls.XamlNativeViews">
 	<ContentPage.Content>
-		<ios:UILabel Text="I'm Native" />
-		<android:TextView  Text="I'm Native too" />
+<!--		<ios:UILabel Text="I'm Native" />-->
+		<androidWidget:TextView  Text="I'm Native too" x:Arguments="{x:Static formsandroid:Forms.Context}" />
 	</ContentPage.Content>
 </ContentPage>

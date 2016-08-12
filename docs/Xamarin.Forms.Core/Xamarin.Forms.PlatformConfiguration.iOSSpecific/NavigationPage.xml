@@ -1,4 +1,4 @@
-<Type Name="NavigationPage" FullName="Xamarin.Forms.PlatformConfiguration.iOS.NavigationPage">
+<Type Name="NavigationPage" FullName="Xamarin.Forms.PlatformConfiguration.iOSSpecific.NavigationPage">
   <TypeSignature Language="C#" Value="public static class NavigationPage" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi abstract sealed beforefieldinit NavigationPage extends System.Object" />
   <AssemblyInfo>
@@ -15,17 +15,17 @@
   </Docs>
   <Members>
     <Member MemberName="EnableTranslucentNavigationBar">
-      <MemberSignature Language="C#" Value="public static Xamarin.Forms.IPlatformElementConfiguration&lt;Xamarin.Forms.PlatformConfiguration.iOS.iOSPlatform,Xamarin.Forms.NavigationPage&gt; EnableTranslucentNavigationBar (this Xamarin.Forms.IPlatformElementConfiguration&lt;Xamarin.Forms.PlatformConfiguration.iOS.iOSPlatform,Xamarin.Forms.NavigationPage&gt; config, bool value);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Xamarin.Forms.IPlatformElementConfiguration`2&lt;class Xamarin.Forms.PlatformConfiguration.iOS.iOSPlatform, class Xamarin.Forms.NavigationPage&gt; EnableTranslucentNavigationBar(class Xamarin.Forms.IPlatformElementConfiguration`2&lt;class Xamarin.Forms.PlatformConfiguration.iOS.iOSPlatform, class Xamarin.Forms.NavigationPage&gt; config, bool value) cil managed" />
+      <MemberSignature Language="C#" Value="public static Xamarin.Forms.IPlatformElementConfiguration&lt;Xamarin.Forms.PlatformConfiguration.iOS,Xamarin.Forms.NavigationPage&gt; EnableTranslucentNavigationBar (this Xamarin.Forms.IPlatformElementConfiguration&lt;Xamarin.Forms.PlatformConfiguration.iOS,Xamarin.Forms.NavigationPage&gt; config, bool value);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig class Xamarin.Forms.IPlatformElementConfiguration`2&lt;class Xamarin.Forms.PlatformConfiguration.iOS, class Xamarin.Forms.NavigationPage&gt; EnableTranslucentNavigationBar(class Xamarin.Forms.IPlatformElementConfiguration`2&lt;class Xamarin.Forms.PlatformConfiguration.iOS, class Xamarin.Forms.NavigationPage&gt; config, bool value) cil managed" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
-        <ReturnType>Xamarin.Forms.IPlatformElementConfiguration&lt;Xamarin.Forms.PlatformConfiguration.iOS.iOSPlatform,Xamarin.Forms.NavigationPage&gt;</ReturnType>
+        <ReturnType>Xamarin.Forms.IPlatformElementConfiguration&lt;Xamarin.Forms.PlatformConfiguration.iOS,Xamarin.Forms.NavigationPage&gt;</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="config" Type="Xamarin.Forms.IPlatformElementConfiguration&lt;Xamarin.Forms.PlatformConfiguration.iOS.iOSPlatform,Xamarin.Forms.NavigationPage&gt;" RefType="this" />
+        <Parameter Name="config" Type="Xamarin.Forms.IPlatformElementConfiguration&lt;Xamarin.Forms.PlatformConfiguration.iOS,Xamarin.Forms.NavigationPage&gt;" RefType="this" />
         <Parameter Name="value" Type="System.Boolean" />
       </Parameters>
       <Docs>
@@ -57,8 +57,8 @@
       </Docs>
     </Member>
     <Member MemberName="IsNavigationBarTranslucent">
-      <MemberSignature Language="C#" Value="public static bool IsNavigationBarTranslucent (this Xamarin.Forms.IPlatformElementConfiguration&lt;Xamarin.Forms.PlatformConfiguration.iOS.iOSPlatform,Xamarin.Forms.NavigationPage&gt; config);" />
-      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsNavigationBarTranslucent(class Xamarin.Forms.IPlatformElementConfiguration`2&lt;class Xamarin.Forms.PlatformConfiguration.iOS.iOSPlatform, class Xamarin.Forms.NavigationPage&gt; config) cil managed" />
+      <MemberSignature Language="C#" Value="public static bool IsNavigationBarTranslucent (this Xamarin.Forms.IPlatformElementConfiguration&lt;Xamarin.Forms.PlatformConfiguration.iOS,Xamarin.Forms.NavigationPage&gt; config);" />
+      <MemberSignature Language="ILAsm" Value=".method public static hidebysig bool IsNavigationBarTranslucent(class Xamarin.Forms.IPlatformElementConfiguration`2&lt;class Xamarin.Forms.PlatformConfiguration.iOS, class Xamarin.Forms.NavigationPage&gt; config) cil managed" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
@@ -67,7 +67,7 @@
         <ReturnType>System.Boolean</ReturnType>
       </ReturnValue>
       <Parameters>
-        <Parameter Name="config" Type="Xamarin.Forms.IPlatformElementConfiguration&lt;Xamarin.Forms.PlatformConfiguration.iOS.iOSPlatform,Xamarin.Forms.NavigationPage&gt;" RefType="this" />
+        <Parameter Name="config" Type="Xamarin.Forms.IPlatformElementConfiguration&lt;Xamarin.Forms.PlatformConfiguration.iOS,Xamarin.Forms.NavigationPage&gt;" RefType="this" />
       </Parameters>
       <Docs>
         <param name="config">To be added.</param>

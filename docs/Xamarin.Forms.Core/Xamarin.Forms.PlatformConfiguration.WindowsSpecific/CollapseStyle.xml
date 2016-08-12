@@ -1,4 +1,4 @@
-<Type Name="CollapseStyle" FullName="Xamarin.Forms.PlatformConfiguration.Windows.CollapseStyle">
+<Type Name="CollapseStyle" FullName="Xamarin.Forms.PlatformConfiguration.WindowsSpecific.CollapseStyle">
   <TypeSignature Language="C#" Value="public enum CollapseStyle" />
   <TypeSignature Language="ILAsm" Value=".class public auto ansi sealed CollapseStyle extends System.Enum" />
   <AssemblyInfo>
@@ -15,13 +15,13 @@
   <Members>
     <Member MemberName="None">
       <MemberSignature Language="C#" Value="None" />
-      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Forms.PlatformConfiguration.Windows.CollapseStyle None = int32(0)" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Forms.PlatformConfiguration.WindowsSpecific.CollapseStyle None = int32(0)" />
       <MemberType>Field</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
-        <ReturnType>Xamarin.Forms.PlatformConfiguration.Windows.CollapseStyle</ReturnType>
+        <ReturnType>Xamarin.Forms.PlatformConfiguration.WindowsSpecific.CollapseStyle</ReturnType>
       </ReturnValue>
       <Docs>
         <summary>To be added.</summary>
@@ -29,13 +29,13 @@
     </Member>
     <Member MemberName="Partial">
       <MemberSignature Language="C#" Value="Partial" />
-      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Forms.PlatformConfiguration.Windows.CollapseStyle Partial = int32(1)" />
+      <MemberSignature Language="ILAsm" Value=".field public static literal valuetype Xamarin.Forms.PlatformConfiguration.WindowsSpecific.CollapseStyle Partial = int32(1)" />
       <MemberType>Field</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
       </AssemblyInfo>
       <ReturnValue>
-        <ReturnType>Xamarin.Forms.PlatformConfiguration.Windows.CollapseStyle</ReturnType>
+        <ReturnType>Xamarin.Forms.PlatformConfiguration.WindowsSpecific.CollapseStyle</ReturnType>
       </ReturnValue>
       <Docs>
         <summary>To be added.</summary>
